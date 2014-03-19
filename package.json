@@ -1,6 +1,6 @@
 {
   "name": "iron-log-entry",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A log entry/error object that will provide stack traces and child entires",
   "main": "IronLogEntry.js",
   "scripts": {
