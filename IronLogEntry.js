@@ -4,14 +4,14 @@ function IronLogEntry(type, message, detailLevel, data, child) {
 		return new IronLogEntry(type, message, data, child);
 	}
 
-    this.message = message;
     this.data = data === void 0 ? {} : data;
     this.child = child === void 0 ? void 0 : new IronLogEntry(child);
     this.detailLevel = detailLevel;
 
     if (type instanceof Error || type instanceof IronLogEntry) {
+		this.message = type.message;
         if (type instanceof IronLogEntry) {
-            this.type = type;
+            this.type = type.type;
             this.data = type.data;
             this.child = type.child;
         }
@@ -34,6 +34,7 @@ function IronLogEntry(type, message, detailLevel, data, child) {
     }
     else {
         this.type = type;
+		this.message = message;
     }
     if (this.type !== void 0 && this.type.toLowerCase().indexOf('error') > 0 && this.detailLevel === void 0) {
         this.detailLevel = Number.MAX_VALUE;
