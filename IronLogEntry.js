@@ -14,6 +14,7 @@ function IronLogEntry(type, message, detailLevel, data, child) {
 			this.type = type.type;
 			this.data = type.data;
 			this.child = type.child;
+			this.stack = type.stack;
 		}
 		else {
 			this.type = type.name;
