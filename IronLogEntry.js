@@ -5,7 +5,12 @@ function IronLogEntry(type, message, detailLevel, data, child) {
 	}
 
 	this.data = data === void 0 ? {} : data;
-	this.child = child === void 0 ? void 0 : new IronLogEntry(child);
+    if (typeof child === "object" && !(child instanceof Error || child instanceof IronLogEntry)) {
+        this.child = new IronLogEntry(child.type, child.message, child.detailLevel, child.data, child.child);
+    }
+    else if (child !== void 0) {
+        this.child = new IronLogEntry(child);
+    }
 	this.detailLevel = detailLevel;
 
 	if (type instanceof Error || type instanceof IronLogEntry) {
@@ -36,8 +41,9 @@ function IronLogEntry(type, message, detailLevel, data, child) {
 	else {
 		this.type = type;
 		this.message = message;
+        this.stack = new Error().stack.replace(/.*\n.*at new IronLogEntry \(.*\)\n/g, "").replace(/.*at/g, "at");
 	}
-	if (this.type !== void 0 && this.type.toLowerCase().indexOf('error') > 0 && this.detailLevel === void 0) {
+	if (this.type !== void 0 && this.type.toLowerCase().indexOf('error') >= 0 && this.detailLevel === void 0) {
 		this.detailLevel = 0;
 	}
 }
@@ -54,23 +60,19 @@ IronLogEntry.prototype.toString = function (nest) {
 		linePrefix + "Detail Level: " + this.detailLevel + "\n" +
 		linePrefix + "Stack: " + ("\n" + this.stack).replace(/\n/g, "\n\t" + linePrefix) + "\n" +
 		linePrefix + "Data: " + JSON.stringify(this.data) + "\n" +
-		linePrefix + "Child: \n" + (
-		this.child !== void 0
-			? this.child.toString(nest + 1)
-			: linePrefix + "\tundefined"
+        (this.child !== void 0
+			? linePrefix + "Child: \n" +this.child.toString(nest + 1)
+			: ""
 		);
 };
 
-IronLogEntry.prototype.fromJSON = function (json) {
-	var obj = JSON.parse(json);
-	this.type = obj.type;
-	this.message = obj.message;
-	if (obj.stack !== void 0) {
-		this.stack = obj.stack;
-	}
-	this.data = obj.data;
-	this.child = obj.child;
-	return this;
+IronLogEntry.prototype.getJSON = function () {
+    return JSON.stringify(this);
+};
+
+IronLogEntry.fromJSON = function (json) {
+    var obj = JSON.parse(json);
+	return new IronLogEntry(obj.type, obj.message, obj.detailLevel, obj.data, obj.child);
 };
 
 module.exports = IronLogEntry;
