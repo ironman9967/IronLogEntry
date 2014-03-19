@@ -4,14 +4,27 @@ function IronLogEntry(type, message, detailLevel, data, child) {
 		return new IronLogEntry(type, message, data, child);
 	}
 
-	this.data = data === void 0 ? {} : data;
+    if (data !== void 0 && (data instanceof Error || data instanceof IronLogEntry)) {
+        child = data;
+    }
+    else if (data !== void 0) {
+        this.data = data;
+    }
+    else {
+        this.data = {};
+    }
+    if (detailLevel !== void 0 && (detailLevel instanceof Error || detailLevel instanceof IronLogEntry)) {
+        child = detailLevel;
+    }
+    else if (typeof detailLevel === "number") {
+        this.detailLevel = detailLevel;
+    }
     if (typeof child === "object" && !(child instanceof Error || child instanceof IronLogEntry)) {
         this.child = new IronLogEntry(child.type, child.message, child.detailLevel, child.data, child.child);
     }
     else if (child !== void 0) {
         this.child = new IronLogEntry(child);
     }
-	this.detailLevel = detailLevel;
 
 	if (type instanceof Error || type instanceof IronLogEntry) {
 		this.message = type.message;
