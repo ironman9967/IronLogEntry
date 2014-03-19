@@ -1,11 +1,11 @@
 
-function IronLogEntry(type, message, data, innerError) {
+function IronLogEntry(type, message, data, child) {
 	if ((this instanceof IronLogEntry) === false) {
-		return new IronLogEntry(type, message, data, innerError);
+		return new IronLogEntry(type, message, data, child);
 	}
 
     this.data = data === void 0 ? {} : data;
-    this.child = innerError === void 0 ? void 0 : new IronLogEntry(innerError);
+    this.child = child === void 0 ? void 0 : new IronLogEntry(child);
 
     if (type instanceof Error || type instanceof IronLogEntry) {
         if (type instanceof IronLogEntry) {
