@@ -1,0 +1,23 @@
+{
+  "name": "IronLogEntry",
+  "version": "0.0.1",
+  "description": "A log entry/error object that will provide stack traces and child entires",
+  "main": "IronLogEntry.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ironman9967/IronLogEntry.git"
+  },
+  "keywords": [
+    "log",
+    "error"
+  ],
+  "author": "Tyson Hester <ironman9967@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ironman9967/IronLogEntry/issues"
+  },
+  "homepage": "https://github.com/ironman9967/IronLogEntry"
+}
