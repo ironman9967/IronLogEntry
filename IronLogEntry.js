@@ -1,23 +1,22 @@
 
-function IronLogEntry(type, message, data, child) {
+function IronLogEntry(type, message, detailLevel, data, child) {
 	if ((this instanceof IronLogEntry) === false) {
 		return new IronLogEntry(type, message, data, child);
 	}
 
+    this.message = message;
     this.data = data === void 0 ? {} : data;
     this.child = child === void 0 ? void 0 : new IronLogEntry(child);
+    this.detailLevel = detailLevel;
 
     if (type instanceof Error || type instanceof IronLogEntry) {
         if (type instanceof IronLogEntry) {
-            this.type = type.type;
-            this.message = type.message;
-            this.stack = type.stack;
+            this.type = type;
             this.data = type.data;
             this.child = type.child;
         }
         else {
             this.type = type.name;
-            this.message = type.message;
             this.stack = type.stack.substring(type.stack.indexOf('\n') + 1).replace(/    at /g, "at ");
             if (type.arguments !== void 0) {
                 this.data.arguments = type.arguments;
@@ -35,7 +34,9 @@ function IronLogEntry(type, message, data, child) {
     }
     else {
         this.type = type;
-        this.message = message;
+    }
+    if (this.type !== void 0 && this.type.toLowerCase().indexOf('error') > 0 && this.detailLevel === void 0) {
+        this.detailLevel = Number.MAX_VALUE;
     }
 }
 
@@ -61,9 +62,12 @@ IronLogEntry.prototype.fromJSON = function (json) {
     var obj = JSON.parse(json);
     this.type = obj.type;
     this.message = obj.message;
-    this.stack = obj.stack;
+    if (obj.stack !== void 0) {
+        this.stack = obj.stack;
+    }
     this.data = obj.data;
     this.child = obj.child;
+    return this;
 };
 
 module.exports = IronLogEntry;
