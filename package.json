@@ -1,10 +1,10 @@
 {
   "name": "iron-log-entry",
-  "version": "0.1.1",
-  "description": "A log entry/error object that will provide stack traces and child entires",
+  "version": "0.2",
+  "description": "A log entry/error object that provides stack traces and child entires",
   "main": "IronLogEntry.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "test.js"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/ironman9967/IronLogEntry/issues"
   },
-  "homepage": "https://github.com/ironman9967/IronLogEntry"
+  "homepage": "https://github.com/ironman9967/IronLogEntry",
+  "dependencies": {
+    "uuid":"*",
+    "lodash":"*"
+  }
 }
