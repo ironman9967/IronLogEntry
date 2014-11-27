@@ -20,3 +20,5 @@ var x = factory.create({
 }).addChild(new Error("grandchild")));
 
 console.log(x.toString());
+
+console.log(x.getJSON());

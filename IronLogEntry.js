@@ -110,6 +110,7 @@ function getCleanObject(ironLogEntry) {
 	var t = _.cloneDeep(ironLogEntry);
 	t.type = typeof ironLogEntry.type === "object" ? ironLogEntry.type.type : ironLogEntry.type;
 	t.opts = void 0;
+	t.userSuppliedKeys = void 0;
 	if (t.child !== void 0) {
 		t.child = getCleanObject(t.child);
 	}
