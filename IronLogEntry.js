@@ -11,7 +11,8 @@ function processOptions(opts) {
 		detailLevel: opts.detailLevel === void 0 ? 0 : opts.detailLevel,
 		data: {},
 		message: "",
-		types: opts.types === void 0 ? IronLogEntry.types : opts.types
+		types: opts.types === void 0 ? IronLogEntry.types : opts.types,
+		createdFromOpts: false
 	};
 }
 
@@ -60,9 +61,12 @@ function IronLogEntry(entry, opts) {
 		});
 
 		if (this.type !== void 0 && this.type.addStack !== void 0 && this.type.addStack)  {
-			this.stack = new Error().stack.replace(/.*at/g, "at")
+			this.stack = new Error().stack
+				.replace(/.*Error.*\n/, "")
+				.replace(/.*\n.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
 				.replace(/.*\n.*at new IronLogEntry \(.*\)\n/g, "")
-				.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "");
+				.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
+				.replace(/.*at /g, "at ");
 		}
 	}
 }
@@ -142,7 +146,10 @@ IronLogEntry.types = {
 IronLogEntry.createFromOptions = function (opts) {
 	return {
 		create: function (entry) {
-			return new IronLogEntry(entry, opts);
+			var addToOpts = {
+				createdFromOpts: true
+			};
+			return new IronLogEntry(entry, _.extend(addToOpts, opts));
 		}
 	}
 };
