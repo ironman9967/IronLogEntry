@@ -60,14 +60,19 @@ function IronLogEntry(entry, opts) {
 			}
 		});
 
+		var stack = new Error().stack
+			.replace(/.*Error.*\n/, "")
+			.replace(/.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
+			.replace(/.*at new IronLogEntry \(.*\)\n/g, "")
+			.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
+			.replace(/.*at /g, "at ");
+
 		if (this.type !== void 0 && this.type.addStack !== void 0 && this.type.addStack)  {
-			this.stack = new Error().stack
-				.replace(/.*Error.*\n/, "")
-				.replace(/.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
-				.replace(/.*at new IronLogEntry \(.*\)\n/g, "")
-				.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
-				.replace(/.*at /g, "at ");
+			this.stack = stack;
 		}
+		this.line = stack;
+		this.line = this.line.substring(3, this.line.indexOf('\n'));
+		this.line = this.line.substring(this.line.indexOf('(') + 1, this.line.indexOf(')'));
 	}
 }
 
@@ -89,6 +94,7 @@ IronLogEntry.prototype.toString = function (nest) {
 	}
 	var type = typeof this.type === "object" ? this.type.type : this.type;
 	var str = linePrefix + type + "(" + this.id + "): " + this.message + "\n" +
+		linePrefix + "at: (" + this.line + ")\n" +
 		linePrefix + "Timestamp: " + new Date(this.timestamp) + "\n" +
 		linePrefix + "Detail Level: " + this.detailLevel + "\n" +
 		(this.stack !== void 0 ? linePrefix + "Stack: " + ("\n" + this.stack).replace(/\n/g, "\n\t" + linePrefix) + "\n" : "") +
