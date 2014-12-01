@@ -12,7 +12,8 @@ function processOptions(opts) {
 		data: {},
 		message: "",
 		types: opts.types === void 0 ? IronLogEntry.types : opts.types,
-		createdFromOpts: false
+		createdFromOpts: false,
+		trimFromStack: opts.trimFromStack === void 0 ? [] : opts.trimFromStack
 	};
 }
 
@@ -54,7 +55,7 @@ function IronLogEntry(entry, opts) {
 		});
 		this.userSuppliedKeys = [];
 		_.each(_.difference(_.keys(entry), _.keys(this.opts)), function (key) {
-			if (!_.contains([ 'id', 'timestamp', 'opts', 'stack', 'child' ], key)) {
+			if (!_.contains([ 'id', 'timestamp', 'opts', 'stack', 'child', 'line' ], key)) {
 				instance.userSuppliedKeys.push(key);
 				setProp(key, entry, instance.opts, instance);
 			}
@@ -67,9 +68,14 @@ function IronLogEntry(entry, opts) {
 			.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
 			.replace(/.*at /g, "at ");
 
+		_.each(this.opts.trimFromStack, function (trimRegex) {
+			stack = stack.replace(new RegExp(trimRegex, 'g'), "");
+		});
+
 		if (this.type !== void 0 && this.type.addStack !== void 0 && this.type.addStack)  {
 			this.stack = stack;
 		}
+
 		this.line = stack;
 		this.line = this.line.substring(3, this.line.indexOf('\n'));
 		this.line = this.line.substring(this.line.indexOf('(') + 1, this.line.indexOf(')'));
@@ -77,9 +83,9 @@ function IronLogEntry(entry, opts) {
 }
 
 IronLogEntry.prototype.addChild = function (child) {
-	this.child = new IronLogEntry(child);
+	this.child = new IronLogEntry(child, this.opts);
 	if (child.child !== void 0) {
-		this.child.addChild(child.child);
+		this.child.addChild(child.child, this.opts);
 	}
 	return this;
 };
