@@ -77,8 +77,13 @@ function IronLogEntry(entry, opts) {
 		}
 
 		this.line = stack;
-		this.line = this.line.substring(3, this.line.indexOf('\n'));
-		this.line = this.line.substring(this.line.indexOf('(') + 1, this.line.indexOf(')'));
+		if (this.line.indexOf('\n') > 0) {
+			this.line = this.line.substring(3, this.line.indexOf('\n'));
+			this.line = this.line.substring(this.line.indexOf('(') + 1, this.line.indexOf(')'));
+		}
+		else {
+			this.line = this.line.substring(3);
+		}
 	}
 }
 
