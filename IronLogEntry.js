@@ -63,8 +63,8 @@ function IronLogEntry(entry, opts) {
 		if (this.type !== void 0 && this.type.addStack !== void 0 && this.type.addStack)  {
 			this.stack = new Error().stack
 				.replace(/.*Error.*\n/, "")
-				.replace(/.*\n.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
-				.replace(/.*\n.*at new IronLogEntry \(.*\)\n/g, "")
+				.replace(/.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
+				.replace(/.*at new IronLogEntry \(.*\)\n/g, "")
 				.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
 				.replace(/.*at /g, "at ");
 		}
