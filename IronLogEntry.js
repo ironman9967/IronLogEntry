@@ -117,7 +117,7 @@ IronLogEntry.prototype.toString = function (nest) {
 	str += (this.child !== void 0
 		? linePrefix + "Child: \n" + this.child.toString(nest + 1)
 		: "");
-	return str;
+	return str.trim();
 };
 
 IronLogEntry.prototype.getJSON = function () {
