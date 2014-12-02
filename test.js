@@ -11,6 +11,8 @@ var factory = IronLogEntry.createFromOptions({
 
 var x = createError();
 
+console.log(factory.opts);
+
 console.log(x.toString());
 
 console.log(x.getJSON());
@@ -22,12 +24,11 @@ function createError() {
         userInfo: {
             some: "user data or object"
         }
-    });
-//.addChild(factory.create({
-//        message: "child",
-//        type: {
-//            type: 'Error',
-//            addStack: true
-//        }
-//    }).addChild(new Error("grandchild")))
+    }).addChild(factory.create({
+        message: "child",
+        type: {
+            type: 'Error',
+            addStack: true
+        }
+    }).addChild(new Error("grandchild")))
 }

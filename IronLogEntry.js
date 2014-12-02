@@ -159,12 +159,13 @@ IronLogEntry.types = {
 
 IronLogEntry.createFromOptions = function (opts) {
 	return {
-		create: function (entry) {
+		log: function (entry) {
 			var addToOpts = {
 				createdFromOpts: true
 			};
 			return new IronLogEntry(entry, _.extend(addToOpts, opts));
-		}
+		},
+		opts: opts
 	}
 };
 
