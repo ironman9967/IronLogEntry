@@ -63,7 +63,7 @@ function IronLogEntry(entry, opts) {
 
 		var stack = new Error().stack
 			.replace(/.*Error.*\n/, "")
-			.replace(/.*at Object.create \(.*IronLogEntry.*\)\n/g, "")
+			.replace(/.*at Object.log \(.*IronLogEntry.*\)\n/g, "")
 			.replace(/.*at new IronLogEntry \(.*\)\n/g, "")
 			.replace(/.*at IronLogEntry.addChild \(.*\)\n/g, "")
 			.replace(/.*at /g, "at ");
