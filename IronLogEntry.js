@@ -55,7 +55,7 @@ function IronLogEntry(entry, opts) {
 		});
 		this.userSuppliedKeys = [];
 		_.each(_.difference(_.keys(entry), _.keys(this.opts)), function (key) {
-			if (!_.contains([ 'id', 'timestamp', 'opts', 'stack', 'child', 'line' ], key)) {
+			if (!_.contains([ 'id', 'timestamp', 'opts', 'stack', 'child', 'line', 'userSuppliedKeys' ], key)) {
 				instance.userSuppliedKeys.push(key);
 				setProp(key, entry, instance.opts, instance);
 			}
